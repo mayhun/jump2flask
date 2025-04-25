@@ -1,0 +1,6 @@
+/venv
+/pybo.db
+/venv.cmd
+**.pdf
+/migrations
+**.pyc
