@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    <!-- 답변 -->
     <h5 class="border-bottom my-3 py-2">{{ question.answer_set|length }}개의 답변이 있습니다.</h5>
     {% for answer in question.answer_set %}
     <div class="card my-3">
@@ -43,6 +44,7 @@
                 {% if g.user == answer.user %}
                 <a href="{{url_for('answer.modify', answer_id=answer.id) }}" 
                     class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" class="delete btn btn-sm btn-outline-secondary" data-uri="{{ url_for('answer.delete', answer_id=answer.id)}}">삭제</a>
                 {% endif %}
             </div>
         </div>
