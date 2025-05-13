@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, url_for, g
+from flask import Blueprint, render_template, request, url_for, g, flash
 from werkzeug.utils import redirect
 
 from .. import db
@@ -35,4 +35,15 @@ def create():
         db.session.add(question)
         db.session.commit()
         return redirect(url_for('main.index'))
+    return render_template('question/question_form.html', form=form)
+
+@bp.route('/modify/<int:question_id>', methods=('GET', 'POST'))
+@login_required
+def modify(question_id):
+    question = Question.query.get_or_404(question_id)
+    if g.user != question.user:
+        flash('수정 권한이 없습니다.')
+        return redirect(url_for('question_detail', question_id=question_id))
+    else:
+        form = QuestionForm(obj=question)
     return render_template('question/question_form.html', form=form)
