@@ -29,27 +29,27 @@ def create(question_id):
 def modify(answer_id):
     answer = Answer.query.get_or_404(answer_id)
     if g.user != answer.user:
-        flash('수정권한이 없습니다.')
+        flash('수정권한이 없습니다')
         return redirect(url_for('question.detail', question_id=answer.question.id))
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AnswerForm()
         if form.validate_on_submit():
             form.populate_obj(answer)
-            answer.modify_date = datetime.now()
+            answer.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
             return redirect(url_for('question.detail', question_id=answer.question.id))
-        else:
-            form = AnswerForm(obj=answer)
-        return render_template('answer/answer_form.html', form=form)
+    else:
+        form = AnswerForm(obj=answer)
+    return render_template('answer/answer_form.html', form=form)
     
 @bp.route('/delete/<int:answer_id>')
 @login_required
 def delete(answer_id):
-    answer = Answer.query.get_or_404(answer_id) 
+    answer = Answer.query.get_or_404(answer_id)
     question_id = answer.question.id
     if g.user != answer.user:
-        flash('삭제권한이 없습니다.')
+        flash('삭제권한이 없습니다')
     else:
-        db.session(delete(answer))
+        db.session.delete(answer)
         db.session.commit()
     return redirect(url_for('question.detail', question_id=question_id))
